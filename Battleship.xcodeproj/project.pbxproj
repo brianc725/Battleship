@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B313CCC1F3EB8FF007371C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B313CCB1F3EB8FF007371C7 /* main.cpp */; };
+		1B313CDA1F3EB926007371C7 /* Board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B313CD21F3EB926007371C7 /* Board.cpp */; };
+		1B313CDB1F3EB926007371C7 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B313CD41F3EB926007371C7 /* Game.cpp */; };
+		1B313CDC1F3EB926007371C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B313CD71F3EB926007371C7 /* main.cpp */; };
+		1B313CDD1F3EB926007371C7 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B313CD81F3EB926007371C7 /* Player.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +27,14 @@
 
 /* Begin PBXFileReference section */
 		1B313CC81F3EB8FF007371C7 /* Battleship */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Battleship; sourceTree = BUILT_PRODUCTS_DIR; };
-		1B313CCB1F3EB8FF007371C7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		1B313CD21F3EB926007371C7 /* Board.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Board.cpp; path = Battleship/Board.cpp; sourceTree = "<group>"; };
+		1B313CD31F3EB926007371C7 /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Board.h; path = Battleship/Board.h; sourceTree = "<group>"; };
+		1B313CD41F3EB926007371C7 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = Battleship/Game.cpp; sourceTree = "<group>"; };
+		1B313CD51F3EB926007371C7 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = Battleship/Game.h; sourceTree = "<group>"; };
+		1B313CD61F3EB926007371C7 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = Battleship/globals.h; sourceTree = "<group>"; };
+		1B313CD71F3EB926007371C7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Battleship/main.cpp; sourceTree = "<group>"; };
+		1B313CD81F3EB926007371C7 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Player.cpp; path = Battleship/Player.cpp; sourceTree = "<group>"; };
+		1B313CD91F3EB926007371C7 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Battleship/Player.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +51,14 @@
 		1B313CBF1F3EB8FF007371C7 = {
 			isa = PBXGroup;
 			children = (
+				1B313CD21F3EB926007371C7 /* Board.cpp */,
+				1B313CD31F3EB926007371C7 /* Board.h */,
+				1B313CD41F3EB926007371C7 /* Game.cpp */,
+				1B313CD51F3EB926007371C7 /* Game.h */,
+				1B313CD61F3EB926007371C7 /* globals.h */,
+				1B313CD71F3EB926007371C7 /* main.cpp */,
+				1B313CD81F3EB926007371C7 /* Player.cpp */,
+				1B313CD91F3EB926007371C7 /* Player.h */,
 				1B313CCA1F3EB8FF007371C7 /* Battleship */,
 				1B313CC91F3EB8FF007371C7 /* Products */,
 			);
@@ -57,7 +75,6 @@
 		1B313CCA1F3EB8FF007371C7 /* Battleship */ = {
 			isa = PBXGroup;
 			children = (
-				1B313CCB1F3EB8FF007371C7 /* main.cpp */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -119,7 +136,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B313CCC1F3EB8FF007371C7 /* main.cpp in Sources */,
+				1B313CDD1F3EB926007371C7 /* Player.cpp in Sources */,
+				1B313CDA1F3EB926007371C7 /* Board.cpp in Sources */,
+				1B313CDB1F3EB926007371C7 /* Game.cpp in Sources */,
+				1B313CDC1F3EB926007371C7 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
