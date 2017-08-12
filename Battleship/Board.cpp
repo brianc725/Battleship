@@ -31,15 +31,9 @@ BoardImpl::BoardImpl(const Game& g)
  : m_game(g)
 {
     m_rows = m_game.rows();
-    m_cols = m_game.cols();
+    m_cols = m_game.cols(); //grab the number of rows and cols from game for usage later
     
-    for (int i = 0; i < m_rows; i++)
-    {
-        for (int j = 0; j < m_cols; j++)
-        {
-            board[i][j] = '.';      //use . to denote an empty board
-        }
-    }
+    clear();
 }
 
 void BoardImpl::clear()
@@ -48,7 +42,7 @@ void BoardImpl::clear()
     {
         for (int j = 0; j < m_cols; j++)
         {
-            board[i][j] = '.';
+            board[i][j] = '.';      //clear the board by putting '.' every point
         }
     }
 }

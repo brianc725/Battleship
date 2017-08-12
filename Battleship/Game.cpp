@@ -26,6 +26,21 @@ class GameImpl
 private:
     int m_rows;
     int m_cols;
+    
+    struct Ship {
+    public:
+        Ship(int length, char symbol, string name) {
+            m_length = length;
+            m_symbol = symbol;
+            m_name = name;
+        }
+        
+        int m_ID;
+        int m_length;
+        char m_symbol;
+        string m_name;
+    };
+    vector <Ship> m_ships;
 };
 
 void waitForEnter()
@@ -38,11 +53,11 @@ GameImpl::GameImpl(int nRows, int nCols)
 {
     if (nRows < MAXROWS)
     {
-        m_rows = nRows;
+        m_rows = nRows; //if rows and cols are less than the max, just set it to that number
     }
     else
     {
-        m_rows = MAXROWS;
+        m_rows = MAXROWS;   //otherwise set to max
     }
     
     if (nCols < MAXCOLS)
@@ -77,7 +92,11 @@ Point GameImpl::randomPoint() const
 
 bool GameImpl::addShip(int length, char symbol, string name)
 {
-    return false;  // This compiles but may not be correct
+    Ship temp(length, symbol, name);
+    temp.m_ID = m_ships.size(); //id fgoes from 0 to nships-1
+    m_ships.push_back(temp);
+    
+    return true;  // This compiles but may not be correct
 }
 
 int GameImpl::nShips() const
