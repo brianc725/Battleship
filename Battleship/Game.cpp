@@ -96,27 +96,27 @@ bool GameImpl::addShip(int length, char symbol, string name)
     temp.m_ID = m_ships.size(); //id fgoes from 0 to nships-1
     m_ships.push_back(temp);
     
-    return true;  // This compiles but may not be correct
+    return true;  //successfully added so return true
 }
 
 int GameImpl::nShips() const
 {
-    return -1;  // This compiles but may not be correct
+    return m_ships.size();
 }
 
 int GameImpl::shipLength(int shipId) const
 {
-    return -1;  // This compiles but may not be correct
+    return m_ships[shipId].m_length;
 }
 
 char GameImpl::shipSymbol(int shipId) const
 {
-    return '?';  // This compiles but may not be correct
+    return m_ships[shipId].m_symbol;
 }
 
 string GameImpl::shipName(int shipId) const
 {
-    return "";  // This compiles but may not be correct
+    return m_ships[shipId].m_name;
 }
 
 Player* GameImpl::play(Player* p1, Player* p2, Board& b1, Board& b2, bool shouldPause)
