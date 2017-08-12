@@ -97,7 +97,18 @@ typedef AwfulPlayer MediocrePlayer;
 
 // TODO:  You need to replace this with a real class declaration and
 //        implementation.
-typedef AwfulPlayer GoodPlayer;
+
+/*
+ commented out to supress errors for compiling
+class GoodPlayer: public Player {
+public:
+    bool isHuman() const { return true; }
+    
+    //add the rest of the virtual function implementations so no longer abstract
+};
+ */
+
+typedef AwfulPlayer GoodPlayer; //remove this later
 
 //*********************************************************************
 //  createPlayer

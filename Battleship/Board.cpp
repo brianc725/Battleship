@@ -22,17 +22,35 @@ class BoardImpl
       // TODO:  Decide what private members you need.  Here's one that's likely
       //        to be useful:
     const Game& m_game;
+    char board [MAXROWS][MAXCOLS];
+    int m_rows;
+    int m_cols;
 };
 
 BoardImpl::BoardImpl(const Game& g)
  : m_game(g)
 {
-    // This compiles, but may not be correct
+    m_rows = m_game.rows();
+    m_cols = m_game.cols();
+    
+    for (int i = 0; i < m_rows; i++)
+    {
+        for (int j = 0; j < m_cols; j++)
+        {
+            board[i][j] = '.';      //use . to denote an empty board
+        }
+    }
 }
 
 void BoardImpl::clear()
 {
-    // This compiles, but may not be correct
+    for (int i = 0; i < m_rows; i++)
+    {
+        for (int j = 0; j < m_cols; j++)
+        {
+            board[i][j] = '.';
+        }
+    }
 }
 
 void BoardImpl::block()
