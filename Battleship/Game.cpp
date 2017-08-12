@@ -23,6 +23,9 @@ class GameImpl
     char shipSymbol(int shipId) const;
     string shipName(int shipId) const;
     Player* play(Player* p1, Player* p2, Board& b1, Board& b2, bool shouldPause);
+private:
+    int m_rows;
+    int m_cols;
 };
 
 void waitForEnter()
@@ -33,17 +36,33 @@ void waitForEnter()
 
 GameImpl::GameImpl(int nRows, int nCols)
 {
-    // This compiles but may not be correct
+    if (nRows < MAXROWS)
+    {
+        m_rows = nRows;
+    }
+    else
+    {
+        m_rows = MAXROWS;
+    }
+    
+    if (nCols < MAXCOLS)
+    {
+        m_cols = nCols;
+    }
+    else
+    {
+        m_cols = MAXROWS;
+    }
 }
 
 int GameImpl::rows() const
 {
-    return -1;  // This compiles but may not be correct
+    return m_rows;
 }
 
 int GameImpl::cols() const
 {
-    return -1;  // This compiles but may not be correct
+    return m_cols;
 }
 
 bool GameImpl::isValid(Point p) const
