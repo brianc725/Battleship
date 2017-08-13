@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdlib>
 #include <cctype>
+#include <vector>
 
 using namespace std;
 
@@ -51,23 +52,8 @@ void waitForEnter()
 
 GameImpl::GameImpl(int nRows, int nCols)
 {
-    if (nRows < MAXROWS)
-    {
-        m_rows = nRows; //if rows and cols are less than the max, just set it to that number
-    }
-    else
-    {
-        m_rows = MAXROWS;   //otherwise set to max
-    }
-    
-    if (nCols < MAXCOLS)
-    {
-        m_cols = nCols;
-    }
-    else
-    {
-        m_cols = MAXROWS;
-    }
+    m_rows = nRows;
+    m_cols = nCols;
 }
 
 int GameImpl::rows() const

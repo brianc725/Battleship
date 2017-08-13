@@ -54,7 +54,7 @@ void BoardImpl::block()
         for (int c = 0; c < m_game.cols(); c++)
             if (randInt(2) == 0)
             {
-                ; // TODO:  Replace this with code to block cell (r,c)
+                board[r][c] = '#'; //# sign used to denote a blocked location
             }
 }
 
@@ -63,13 +63,85 @@ void BoardImpl::unblock()
     for (int r = 0; r < m_game.rows(); r++)
         for (int c = 0; c < m_game.cols(); c++)
         {
-            ; // TODO:  Replace this with code to unblock cell (r,c) if blocked
+            if (board[r][c] == '#')
+            {
+                board[r][c] = '.'; //unblock by putting back the period
+            }
         }
 }
 
 bool BoardImpl::placeShip(Point topOrLeft, int shipId, Direction dir)
 {
-    return false; // This compiles, but may not be correct
+    if (shipId < 0 || shipId>=m_game.nShips())
+    {
+        return false;   //if shipId is negative or bigger than the number of ships is false
+    }
+    if (m_game.isValid(topOrLeft) == false)
+    {
+        return false; //point is outside of the board
+    }
+    if (board[topOrLeft.r][topOrLeft.c] != '.')
+    {
+        return false;   //if ship overlaps already placed ship or is blocked
+    }
+    char idCheck = m_game.shipSymbol(shipId);
+    for (int i = 0; i < m_rows; i++)
+    {
+        for (int j = 0; j < m_cols; j++)
+        {
+            if (board[i][j] == idCheck)
+            {
+                return false;   //if the ship symbol is already on the board, return false
+            }
+        }
+    }
+    
+    //check overlap ship or if ship would be partly or fully outside the board
+    
+    if (dir == HORIZONTAL) //for horizontal only column increases
+    {
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            if (board[topOrLeft.r][topOrLeft.c + i] != '.')
+            {
+                return false;    //if not an empty spot on the board return false
+            }
+            Point temp(topOrLeft.r, topOrLeft.c+i);
+            if (m_game.isValid(temp) == false)
+            {
+                return false; //if not a point on the board return false
+            }
+        }
+        //check all points before placing the ships with the symbol and returning true
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            board[topOrLeft.r][topOrLeft.c+i] = idCheck; //set the board to the ship symbol
+        }
+        return true;
+    }
+    else if (dir == VERTICAL) //for vertical only row increases
+    {
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            if (board[topOrLeft.r+i][topOrLeft.c] != '.')
+            {
+                return false;    //if not an empty spot on the board return false
+            }
+            Point temp(topOrLeft.r+i, topOrLeft.c);
+            if (m_game.isValid(temp) == false)
+            {
+                return false; //if not a point on the board return false
+            }
+        }
+        //check all points before placing the ships with the symbol and returning true
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            board[topOrLeft.r+i][topOrLeft.c] = idCheck; //set the board to the ship symbol
+        }
+        return true;
+    }
+    
+    return true;
 }
 
 bool BoardImpl::unplaceShip(Point topOrLeft, int shipId, Direction dir)
@@ -89,7 +161,17 @@ bool BoardImpl::attack(Point p, bool& shotHit, bool& shipDestroyed, int& shipId)
 
 bool BoardImpl::allShipsDestroyed() const
 {
-    return false; // This compiles, but may not be correct
+    for (int i = 0; i < m_rows; i++)
+    {
+        for (int j = 0; j < m_cols; j++)
+        {
+            if ((board[i][j] != '.')&&(board[i][j] != 'X') && (board[i][j] != 'o'))
+            {
+                return false; //it is character other than empty board, hit and miss
+            }
+        }
+    }
+    return true; //only '.', 'X', and 'o' remain
 }
 
 //******************** Board functions ********************************

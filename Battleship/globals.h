@@ -2,7 +2,6 @@
 #define GLOBALS_INCLUDED
 
 #include <random>
-#include <vector>
 
 const int MAXROWS = 10;
 const int MAXCOLS = 10;
