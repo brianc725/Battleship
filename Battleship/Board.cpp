@@ -146,17 +146,161 @@ bool BoardImpl::placeShip(Point topOrLeft, int shipId, Direction dir)
 
 bool BoardImpl::unplaceShip(Point topOrLeft, int shipId, Direction dir)
 {
-    return false; // This compiles, but may not be correct
+    if (shipId < 0 || shipId>=m_game.nShips())
+    {
+        return false;   //if shipId is negative or bigger than the number of ships is false
+    }
+    if (m_game.isValid(topOrLeft) == false)
+    {
+        return false; //point is outside of the board
+    }
+    
+    char shipSymbol = m_game.shipSymbol(shipId);
+    
+    if (dir == HORIZONTAL)
+    {
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            if (board[topOrLeft.r][topOrLeft.c + i] != shipSymbol)
+            {
+                return false;    //if not correct ship symbol return false
+            }
+            Point temp(topOrLeft.r, topOrLeft.c+i);
+            if (m_game.isValid(temp) == false)
+            {
+                return false; //if not a point on the board return false
+            }
+        }
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            board[topOrLeft.r][topOrLeft.c+i] = '.'; //set the board back to empty
+        }
+        return true;
+    }
+    else if (dir == VERTICAL)
+    {
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            if (board[topOrLeft.r+i][topOrLeft.c] != shipSymbol)
+            {
+                return false;    //if not correct ship symbol return false
+            }
+            Point temp(topOrLeft.r+i, topOrLeft.c);
+            if (m_game.isValid(temp) == false)
+            {
+                return false; //if not a point on the board return false
+            }
+        }
+        for (int i = 0; i < m_game.shipLength(shipId); i++)
+        {
+            board[topOrLeft.r+i][topOrLeft.c] = '.'; //set the board back to empty
+        }
+        return true;
+    }
+    
+    return true;
 }
 
 void BoardImpl::display(bool shotsOnly) const
 {
-    // This compiles, but may not be correct
+    cout << "  "; //two spaces
+    for (int i = 0; i < m_rows; i++)
+    {
+        cout << i; //col number
+    }
+    cout << endl; //newline
+    //END OF FIRST LINE
+    
+    if (shotsOnly) //if shots only is true
+    {
+        for (int i = 0; i < m_rows; i++)
+        {
+            cout << i << " "; //row number with space
+            for (int j = 0; j < m_cols; j++)
+            {
+               if ((board[i][j] != 'X') && (board[i][j] != 'o'))
+               {
+                   cout << '.'; //if a ship is here replace with period
+               }
+               else {
+                   cout << board[i][j]; //just print the X or the o for the shots
+               }
+            }
+            cout << endl; //newline
+        }
+    }
+    else
+    {
+        for (int i = 0; i < m_rows; i++)
+        {
+            cout << i << " "; //row number with space
+            for (int j = 0; j < m_cols; j++)
+            {
+                cout << board[i][j]; //contents of current row
+            }
+            cout << endl; //newline
+        }
+    }
 }
 
 bool BoardImpl::attack(Point p, bool& shotHit, bool& shipDestroyed, int& shipId)
 {
-    return false; // This compiles, but may not be correct
+    if (m_game.isValid(p) == false)
+    {
+        shipDestroyed = false;
+        shotHit = false;
+        shipId = -1; //make shipId -1 to say it failed
+        return false; //point is outside of the board
+    }
+    if ((board[p.r][p.c] == 'X') || (board[p.r][p.c] == 'o'))
+    {
+        shipDestroyed = false;
+        shotHit = false;
+        shipId = -1; //make shipId -1 to say it failed
+        return false; //point has already been attacked previously
+    }
+    if (board[p.r][p.c] == '.')
+    {
+        board[p.r][p.c] = 'o'; //if point was empty, set to a miss
+        shotHit = false;
+        shipDestroyed = false; //ship wasn't hit or destroyed so bools set to false
+        shipId = -1; //make shipId -1 to say it failed
+        return true;
+    }
+    else
+    {
+        char shipSymbol = board[p.r][p.c];
+        board[p.r][p.c] = 'X';
+        shotHit = true; //hit the ship
+        bool shipLeft = false;
+        for (int i = 0; i < m_rows; i++)
+        {
+            for (int j = 0; j < m_cols; j++)
+            {
+                if (board[i][j] == shipSymbol)
+                {
+                    shipLeft = true; //if the ship that we just hit has symbols still on board, set shipLeft to true
+                }
+            }
+        }
+        if (shipLeft)
+        {
+            shipDestroyed = false; //part of the ship is still on the board so not destroyed
+        }
+        else
+        {
+            shipDestroyed = true;
+        }
+        for (int i = 0; i < m_game.nShips(); i++)
+        {
+            if (m_game.shipSymbol(i) == shipSymbol)
+            {
+                shipId = i; //set the matching ship symbol to shipId
+            }
+        }
+        
+        return true;
+    }
 }
 
 bool BoardImpl::allShipsDestroyed() const
