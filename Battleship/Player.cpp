@@ -68,6 +68,10 @@ void AwfulPlayer::recordAttackByOpponent(Point /* p */)
 //  HumanPlayer
 //*********************************************************************
 
+// TODO:  You need to replace this with a real class declaration and
+//        implementation.
+//typedef AwfulPlayer HumanPlayer;
+
 bool getLineWithTwoIntegers(int& r, int& c)
 {
     bool result(cin >> r >> c);
@@ -77,9 +81,56 @@ bool getLineWithTwoIntegers(int& r, int& c)
     return result;
 }
 
-// TODO:  You need to replace this with a real class declaration and
-//        implementation.
-typedef AwfulPlayer HumanPlayer;
+class HumanPlayer : public Player {
+public:
+    HumanPlayer(string nm, const Game &g);
+    virtual bool isHuman() const;
+    virtual bool placeShips(Board &b);
+    virtual Point recommendAttack();
+    virtual void recordAttackResult(Point p, bool validShot, bool shotHit,
+                                    bool shipDestroyed, int shipId);
+    virtual void recordAttackByOpponent(Point p);
+};
+
+HumanPlayer::HumanPlayer(string nm, const Game &g)
+:Player(nm, g)
+{
+    //constructor using initialization list
+}
+
+bool HumanPlayer::isHuman() const
+{
+    return true;
+}
+
+bool HumanPlayer::placeShips(Board &b)
+{
+    return false; //NEED TO DO THIS STILL DELETE THIS
+}
+
+Point HumanPlayer::recommendAttack()
+{
+    int r = 0;
+    int c = 0;
+    bool run = false;
+    while(run == false)
+    {
+        cout << "Enter row and column of topmost cell (e.g. 3 5):" << endl;
+        run = getLineWithTwoIntegers(r, c);
+    }
+    Point temp(r, c);
+    return temp;
+}
+
+void HumanPlayer::recordAttackResult(Point p, bool validShot, bool shotHit, bool shipDestroyed, int shipId)
+{
+    //does nothing for a human player
+}
+
+void HumanPlayer::recordAttackByOpponent(Point p)
+{
+    //does nothing for a human player
+}
 
 //*********************************************************************
 //  MediocrePlayer
