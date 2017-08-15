@@ -204,7 +204,7 @@ bool BoardImpl::unplaceShip(Point topOrLeft, int shipId, Direction dir)
 void BoardImpl::display(bool shotsOnly) const
 {
     cout << "  "; //two spaces
-    for (int i = 0; i < m_rows; i++)
+    for (int i = 0; i < m_cols; i++)
     {
         cout << i; //col number
     }

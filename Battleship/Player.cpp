@@ -105,7 +105,69 @@ bool HumanPlayer::isHuman() const
 
 bool HumanPlayer::placeShips(Board &b)
 {
-    return false; //NEED TO DO THIS STILL DELETE THIS
+    cout << name() << " must place " << game().nShips() << " ships." << endl;
+    for (int i = 0; i < game().nShips(); i++)
+    {
+        bool validDir = false;
+        Direction dir;
+        while (!validDir)
+        {
+            cout << "Enter h or v for direction of " << game().shipName(i) << "(length " << game().shipLength(i) << "): ";
+            char direction;
+            cin >> direction;
+            if (direction == 'h')
+            {
+                validDir = true;
+                dir = HORIZONTAL;
+            }
+            else if (direction == 'v')
+            {
+                dir = VERTICAL;
+                validDir = true;
+            }
+            else
+            {
+                cout << "Direction must be h or v." << endl;
+            }
+        }
+        bool validPt = false;
+        while (!validPt)    //check if valid pt
+        {
+            bool validNums = false;
+            int r = 0;
+            int c = 0;
+            while (!validNums)  //check if valid ints
+            {
+                if (dir == HORIZONTAL)
+                {
+                    cout << "Enter row and column of leftmost cell (e.g. 3 5): " << endl;
+                }
+                else if (dir == VERTICAL)
+                {
+                    cout << "Enter row and column of topmost cell (e.g. 3 5): " << endl;
+                }
+                if (getLineWithTwoIntegers(r, c))
+                {
+                    validNums = true; //got the two integers successfully
+                }
+                else
+                {
+                    cout << "You must enter two integers." << endl;
+                }
+            }
+            Point temp(r,c);
+            if (b.placeShip(temp, i, dir) == true)  //if we can place a ship at that location, end while loop
+            {
+                validPt = true;
+            }
+            else
+            {
+                cout << "The ship can not be placed there." << endl;
+            }
+        }
+    } //end of for loop
+    
+    return true;
 }
 
 Point HumanPlayer::recommendAttack()
