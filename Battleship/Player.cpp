@@ -109,10 +109,11 @@ bool HumanPlayer::placeShips(Board &b)
     for (int i = 0; i < game().nShips(); i++)
     {
         bool validDir = false;
+        b.display(false); //show the board each time with ships on it
         Direction dir;
         while (!validDir)
         {
-            cout << "Enter h or v for direction of " << game().shipName(i) << "(length " << game().shipLength(i) << "): ";
+            cout << "Enter h or v for direction of " << game().shipName(i) << " (length " << game().shipLength(i) << "): ";
             char direction;
             cin >> direction;
             if (direction == 'h')
@@ -140,11 +141,11 @@ bool HumanPlayer::placeShips(Board &b)
             {
                 if (dir == HORIZONTAL)
                 {
-                    cout << "Enter row and column of leftmost cell (e.g. 3 5): " << endl;
+                    cout << "Enter row and column of leftmost cell (e.g. 3 5): ";
                 }
                 else if (dir == VERTICAL)
                 {
-                    cout << "Enter row and column of topmost cell (e.g. 3 5): " << endl;
+                    cout << "Enter row and column of topmost cell (e.g. 3 5): ";
                 }
                 if (getLineWithTwoIntegers(r, c))
                 {
@@ -177,7 +178,7 @@ Point HumanPlayer::recommendAttack()
     bool run = false;
     while(run == false)
     {
-        cout << "Enter row and column of topmost cell (e.g. 3 5):" << endl;
+        cout << "Enter the row and column to attack (e.g, 3 5): ";
         run = getLineWithTwoIntegers(r, c);
     }
     Point temp(r, c);

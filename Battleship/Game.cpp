@@ -107,7 +107,103 @@ string GameImpl::shipName(int shipId) const
 
 Player* GameImpl::play(Player* p1, Player* p2, Board& b1, Board& b2, bool shouldPause)
 {
-    return nullptr;  // This compiles but may not be correct
+    if(!p1->placeShips(b1))
+    {
+        return nullptr; //if player's place ship fails return nullptr
+    }
+    if (!p2->placeShips(b2))
+    {
+        return nullptr; //if player's place ships fails return nullptr
+    }
+    while(!b1.allShipsDestroyed() && !b2.allShipsDestroyed())    //while still ships to be destroyed run the loop
+    {
+        bool shotHit;
+        bool shipDestroyed;
+        int shipId;
+        cout << p1->name() << "'s turn. Board for " << p2->name() << ":" << endl;
+        b2.display(p1->isHuman()); //display second player's board, if first player human show shots only
+        Point temp1 = p1->recommendAttack();
+        if(!b2.attack(temp1, shotHit, shipDestroyed, shipId)) //if attack failed
+        {
+            cout << p1->name() << " wasted a shot at ("<< temp1.r <<"," << temp1.c << ")." << endl;
+            //if attack missed or was unnecessary, say they wasted a shot at that point
+        }
+        else    //shot was valid so determine if they hit or misssed, if ship sank, etc.
+        {
+            if (shipDestroyed) //ship sunk
+            {
+                cout << p1->name() << " attacked (" << temp1.r <<"," << temp1.c <<") and destroyed the " << m_ships[shipId].m_name <<", resulting in:" << endl;
+            }
+            else if (shotHit) //hit
+            {   //Shuman the Human attacked (3,6) and hit something, resulting in:
+                cout << p1->name() << " attacked (" << temp1.r <<"," << temp1.c <<") and hit something, resulting in:" << endl;
+            }
+            else if (!shotHit)   //miss
+            {
+                cout << p1->name() << " attacked (" << temp1.r <<"," << temp1.c <<") and missed, resulting in:" << endl;
+            }
+        }
+        b2.display(p1->isHuman()); //show the result of the attack
+        if (shouldPause && !b1.allShipsDestroyed() && !b2.allShipsDestroyed())
+        {
+            waitForEnter(); //pause game if shouldPause is true
+        }
+        
+        if (b2.allShipsDestroyed()) //player 2 lost
+        {
+            if(p2->isHuman())
+            {
+                b2.display(false);
+            }
+            cout << p1->name() << " wins!" << endl;
+            return p1;
+        }
+        
+        //do player 2 now attacking player 1
+        bool shotHit2;
+        bool shipDestroyed2;
+        int shipId2;
+        cout << p2->name() << "'s turn. Board for " << p1->name() << ":" << endl;
+        b1.display(p2->isHuman());
+        Point temp2 = p2->recommendAttack();
+        if(!b1.attack(temp2, shotHit2, shipDestroyed2, shipId2)) //if attack failed
+        {
+            cout << p2->name() << " wasted a shot at ("<< temp2.r <<"," << temp2.c << ")." << endl;
+            //if attack missed or was unnecessary, say they wasted a shot at that point
+        }
+        else    //shot was valid so determine if they hit or misssed, if ship sank, etc.
+        {
+            if (shipDestroyed2) //ship sunk
+            {
+                cout << p2->name() << " attacked (" << temp2.r <<"," << temp2.c <<") and destroyed the " << m_ships[shipId2].m_name <<", resulting in:" << endl;
+            }
+            else if (shotHit2) //hit
+            {   //Shuman the Human attacked (3,6) and hit something, resulting in:
+                cout << p2->name() << " attacked (" << temp2.r <<"," << temp2.c <<") and hit something, resulting in:" << endl;
+            }
+            else if (!shotHit2)   //miss
+            {
+                cout << p2->name() << " attacked (" << temp2.r <<"," << temp2.c <<") and missed, resulting in:" << endl;
+            }
+        }
+        b1.display(p2->isHuman()); //show the result of the attack
+         if (shouldPause && !b1.allShipsDestroyed() && !b2.allShipsDestroyed())
+        {
+            waitForEnter(); //pause game if shouldPause is true
+        }
+    
+        if (b1.allShipsDestroyed()) //player 1 lost
+        {
+            if(p1->isHuman())
+            {
+                b1.display(false);
+            }
+            cout << p2->name() << " wins!" << endl;
+            return p2;
+        }
+    }
+    
+    return nullptr;
 }
 
 //******************** Game functions *******************************
