@@ -24,6 +24,7 @@ int main()
     cout << "  3.  A " << NTRIALS
          << "-game match between a mediocre and an awful player, with no pauses"
          << endl;
+    cout << "  4.  A human player against a human player" << endl;
     cout << "Enter your choice: ";
     string line;
     getline(cin,line);
@@ -77,6 +78,17 @@ int main()
           // an awful player.  Similarly, a good player should outperform
           // a mediocre player.
     }
+    else if (line[0] == '4')
+    {
+        Game g(10, 10);
+        addStandardShips(g);
+        Player* p1 = createPlayer("human", "Loomin the Human", g);
+        Player* p2 = createPlayer("human", "Shuman the Human", g);
+        g.play(p1, p2);
+        delete p1;
+        delete p2;
+    }
+
     else
     {
        cout << "That's not one of the choices." << endl;

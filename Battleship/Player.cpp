@@ -310,7 +310,6 @@ bool MediocrePlayer::placeRecursive(Board &b, int shipId, Point p1)
 
 Point MediocrePlayer::recommendAttack()
 {
-    cout << "recommending attack" << endl;
     if (m_state == 1)
     {
         bool validShot = false;
