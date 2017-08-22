@@ -130,6 +130,7 @@ Player* GameImpl::play(Player* p1, Player* p2, Board& b1, Board& b2, bool should
         }
         else    //shot was valid so determine if they hit or misssed, if ship sank, etc.
         {
+            p1->recordAttackResult(temp1, true,shotHit, shipDestroyed,shipId);
             if (shipDestroyed) //ship sunk
             {
                 cout << p1->name() << " attacked (" << temp1.r <<"," << temp1.c <<") and destroyed the " << m_ships[shipId].m_name <<", resulting in:" << endl;
@@ -173,12 +174,13 @@ Player* GameImpl::play(Player* p1, Player* p2, Board& b1, Board& b2, bool should
         }
         else    //shot was valid so determine if they hit or misssed, if ship sank, etc.
         {
+             p2->recordAttackResult(temp2, true,shotHit2, shipDestroyed2,shipId2);
             if (shipDestroyed2) //ship sunk
             {
                 cout << p2->name() << " attacked (" << temp2.r <<"," << temp2.c <<") and destroyed the " << m_ships[shipId2].m_name <<", resulting in:" << endl;
             }
-            else if (shotHit2) //hit
-            {   //Shuman the Human attacked (3,6) and hit something, resulting in:
+            else if (shotHit2) //only hit not sunk
+            {
                 cout << p2->name() << " attacked (" << temp2.r <<"," << temp2.c <<") and hit something, resulting in:" << endl;
             }
             else if (!shotHit2)   //miss

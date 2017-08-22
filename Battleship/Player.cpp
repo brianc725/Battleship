@@ -199,11 +199,209 @@ void HumanPlayer::recordAttackByOpponent(Point p)
 //  MediocrePlayer
 //*********************************************************************
 
-// TODO:  You need to replace this with a real class declaration and
-//        implementation.
-typedef AwfulPlayer MediocrePlayer;
 // Remember that Mediocre::placeShips(Board& b) must start by calling
 // b.block(), and must call b.unblock() just before returning.
+
+class MediocrePlayer: public Player
+{
+public:
+    MediocrePlayer(string nm, const Game &g);
+    virtual bool placeShips(Board &b);
+    virtual Point recommendAttack();
+    virtual void recordAttackResult(Point p, bool validShot, bool shotHit, bool shipDestroyed, int shipId);
+    virtual void recordAttackByOpponent(Point p);
+    bool placeRecursive(Board &b, int shipId, Point p1);
+    
+    int m_state; //mediocre is initially in state 1
+    char m_local [MAXROWS][MAXCOLS];
+    Point previous;
+};
+
+MediocrePlayer::MediocrePlayer(string nm, const Game &g)
+:Player(nm, g)
+{
+    m_state = 1;
+    //constructor using initialization list
+    for(int i = 0; i < g.rows(); i++)
+    {
+        for (int j = 0; j < g.cols(); j++)
+        {
+            m_local[i][j] = 'o'; //set local board to empty
+        }
+    }
+}
+
+bool MediocrePlayer::placeShips(Board &b)
+{
+    bool placed = false;
+    for (int i = 0; i < 50; i++)
+    {
+        b.block(); //block half of the positions on the board
+        int startShip = 0;
+        Point start(0,0);
+        placed = placeRecursive(b, startShip, start); //start in upper left corner with first ship and move from there
+        if (placed)
+        {
+            b.unblock(); //if successfully placed, unblock board and return true immediately
+            return true;
+        }
+        b.unblock();
+    }
+    return false; //if it got to this point then it could not place the ships
+}
+
+bool MediocrePlayer::placeRecursive(Board &b, int shipId, Point p1)
+{
+
+    if (shipId >= game().nShips())
+    {
+        return true; //we went through all the ships
+    }
+    if (!(game().isValid(p1)))
+    {
+        return false;    //point is outside of range so go back
+    }
+    if (b.placeShip(p1, shipId, HORIZONTAL))
+    {
+        if(placeRecursive(b, shipId+1, p1))
+        {
+            return true; //was able to place ship properly so place the next ship
+        }
+        else {
+            b.unplaceShip(p1, shipId, HORIZONTAL); //ship could not be placed later so remove them
+        }
+    }
+    if (b.placeShip(p1, shipId, VERTICAL)) //if horizontal doesnt work try vertical
+    {
+        if(placeRecursive(b, shipId+1, p1))
+        {
+            return true; //was able to place ship properly so place the next ship
+        }
+        else {
+            b.unplaceShip(p1, shipId, VERTICAL); //ship could not be placed later so remove them
+        }
+    }
+    //move one point at a time if point is taken
+    if(p1.r == game().rows()-1)
+    {
+        Point p2(0, p1.c+1); //if can move down move down
+        if(placeRecursive(b, shipId, p2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else {
+        Point p2(p1.r+1, p1.c); //otherwise move to the right
+        if(placeRecursive(b, shipId, p2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+     
+}
+
+Point MediocrePlayer::recommendAttack()
+{
+    cout << "recommending attack" << endl;
+    if (m_state == 1)
+    {
+        bool validShot = false;
+        while (!validShot)
+        {
+            Point temp = game().randomPoint();
+            validShot = game().isValid(temp); //keep getting a random point if it is not valid
+            if (m_local[temp.r][temp.c] == 'X')
+            {
+                validShot = false; //if already fired there pick again
+            }
+            else
+            {
+                m_local[temp.r][temp.c] = 'X';
+                return temp;
+            }
+        }
+
+    }
+    else if (m_state == 2)
+    {
+        cout << "in state 2" << endl;
+        bool invalid = true;
+        int x = 4;
+        int y = 4;
+        while (invalid)//handle row 4 to -4
+        {
+            Point temp = Point(previous.r+x, previous.c);
+            if ((m_local[temp.r][temp.c] == 'o') && (game().isValid(temp)))
+            {
+                invalid = false;
+                m_local[temp.r][temp.c] = 'X'; //mark as used now
+                return temp;
+            }
+            else if (x >= -4)
+            {
+                x--;
+            }
+            else
+            {
+                invalid = false;
+            }
+        }
+        bool invalidCol = true;
+        while (invalidCol)
+        {
+            Point temp = Point(previous.r, previous.c+y);
+            if ((m_local[temp.r][temp.c] == 'o') && (game().isValid(temp)))
+            {
+                invalidCol = false;
+                m_local[temp.r][temp.c] = 'X';
+                return temp;
+            }
+            else if (y >= -4)
+            {
+                y--;
+            }
+            else
+            {
+                m_state = 1;
+            }
+
+        }
+    }
+    return Point(0,0);
+}
+
+void MediocrePlayer::recordAttackResult(Point p, bool validShot, bool shotHit, bool shipDestroyed, int shipId)
+{
+    if (m_state == 1)
+    {
+        if (shotHit)
+        {
+            previous = p; //save where to go +/- 4 from
+            m_state = 2;
+        }
+    }
+    else if (m_state == 2)
+    {
+        if (shipDestroyed)
+        {
+            m_state = 1;
+        }
+        
+    }
+}
+
+void MediocrePlayer::recordAttackByOpponent(Point p)
+{
+    //does nothing for a mediocre player
+}
 
 //*********************************************************************
 //  GoodPlayer
@@ -211,19 +409,41 @@ typedef AwfulPlayer MediocrePlayer;
 
 // TODO:  You need to replace this with a real class declaration and
 //        implementation.
+typedef MediocrePlayer GoodPlayer;
 
 /*
- commented out to supress errors for compiling
-class GoodPlayer: public Player {
+class GoodPlayer: public Player
+{
 public:
-    bool isHuman() const { return true; }
-    
-    //add the rest of the virtual function implementations so no longer abstract
+    virtual bool placeShips(Board &b);
+    virtual Point reccomendAttack();
+    virtual void recordAttackResult(Point p, bool validShot, bool shotHit, bool shipDestroyed, int shipId);
+    virtual void recordAttackByOpponent(Point p);
 };
- */
 
-typedef AwfulPlayer GoodPlayer; //remove this later
+bool GoodPlayer::placeShips(Board &b)
+{
+    
+    return true; //THIS IS NOT CORRECT MUST DELETE THIS
+}
 
+Point GoodPlayer::reccomendAttack()
+{
+    Point temp;
+    return temp; //THIS IS NOT CORRECT MUST DELETE THIS
+}
+
+void GoodPlayer::recordAttackResult(Point p, bool validShot, bool shotHit, bool shipDestroyed, int shipId)
+{
+    
+}
+
+void GoodPlayer::recordAttackByOpponent(Point p)
+{
+    //does nothing for a mediocre player
+}
+*/
+ 
 //*********************************************************************
 //  createPlayer
 //*********************************************************************
