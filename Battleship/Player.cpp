@@ -332,7 +332,6 @@ Point MediocrePlayer::recommendAttack()
     }
     else if (m_state == 2)
     {
-        cout << "in state 2" << endl;
         bool invalid = true;
         int x = 4;
         int y = 4;
@@ -371,6 +370,7 @@ Point MediocrePlayer::recommendAttack()
             else
             {
                 m_state = 1;
+                return game().randomPoint(); //if really nothing just do a random point and go back to state 1
             }
 
         }
