@@ -1,5 +1,5 @@
 # Battleship
-A game of Battleship coded in C++ using polymorphism and recursion.
+A game of Battleship&#174;  coded in C++ using polymorphism and recursion.
 
 To run, download the repo and unzip the folder. 
 
@@ -12,3 +12,5 @@ There are 4 options now,
   2.  A mediocre player against a human player
   3.  A 10-game match between a mediocre and an awful player, with no pauses
   4.  A human player against a human player
+
+Simply choose whichever option you'd like by typing in the number. After that, the game explains the rest of the directions for the game.
